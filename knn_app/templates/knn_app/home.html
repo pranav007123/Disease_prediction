@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prediction System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .symptom-checkbox {
+            margin-bottom: 10px;
+        }
+        .result-card {
+            display: none;
+            margin-top: 20px;
+        }
+        .top-predictions {
+            margin-top: 15px;
+        }
+        .prediction-item {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Disease Prediction System</h1>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Select Symptoms</h5>
+                        <form id="symptomForm">
+                            {% csrf_token %}
+                            {% for feature in FEATURE_NAMES %}
+                            <div class="form-check symptom-checkbox">
+                                <input class="form-check-input" type="checkbox" name="{{ feature }}" id="{{ feature }}">
+                                <label class="form-check-label" for="{{ feature }}">
+                                    {{ feature }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary mt-3">Predict Disease</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card result-card" id="resultCard">
+                    <div class="card-body">
+                        <h5 class="card-title">Prediction Results</h5>
+                        <div id="loading" class="text-center" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <div id="resultContent">
+                            <h4>Predicted Disease: <span id="predictedDisease" class="text-primary"></span></h4>
+                            <p>Confidence: <span id="confidence" class="text-success"></span>%</p>
+                            
+                            <div class="top-predictions">
+                                <h5>Top 3 Predictions:</h5>
+                                <div id="topPredictions"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(document).ready(function() {
+            $('#symptomForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading spinner
+                $('#loading').show();
+                $('#resultContent').hide();
+                $('#resultCard').show();
+                
+                // Get form data
+                var formData = {};
+                $('input[type="checkbox"]').each(function() {
+                    formData[$(this).attr('name')] = $(this).is(':checked') ? '1' : '0';
+                });
+                
+                // Add CSRF token
+                formData['csrfmiddlewaretoken'] = getCookie('csrftoken');
+                
+                // Make AJAX request
+                $.ajax({
+                    url: '{% url "predict" %}',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Hide loading spinner
+                        $('#loading').hide();
+                        $('#resultContent').show();
+                        
+                        // Update results
+                        $('#predictedDisease').text(response.disease);
+                        $('#confidence').text(response.confidence);
+                        
+                        // Update top predictions
+                        var topPredictionsHtml = '';
+                        response.top_predictions.forEach(function(pred) {
+                            topPredictionsHtml += `
+                                <div class="prediction-item">
+                                    <strong>${pred.disease}</strong>
+                                    <span class="float-end">${pred.probability}%</span>
+                                </div>
+                            `;
+                        });
+                        $('#topPredictions').html(topPredictionsHtml);
+                    },
+                    error: function(xhr, status, error) {
+                        $('#loading').hide();
+                        $('#resultContent').show();
+                        alert('Error making prediction. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

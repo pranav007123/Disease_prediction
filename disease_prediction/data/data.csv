@@ -1,0 +1,28 @@
+Fever,Cough,Fatigue,Body Pain,Headache,Sore Throat,Nausea,Vomiting,Diarrhea,Chest Pain,Shortness of Breath,Loss of Taste,Loss of Smell,Skin Rash,Joint Pain,Muscle Pain,Chills,Disease
+1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1,COVID-19
+1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1,COVID-19
+1,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,1,COVID-19
+1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,Severe COVID-19
+1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,Severe COVID-19
+1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,Severe COVID-19
+1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,Influenza
+1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,Influenza
+1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,Influenza
+1,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,1,Stomach Flu
+1,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,1,Stomach Flu
+1,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,1,Stomach Flu
+0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,Common Cold
+0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,Common Cold
+0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,Common Cold
+1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,0,1,Pneumonia
+1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,0,1,Pneumonia
+1,1,1,1,0,1,0,0,0,1,1,0,0,0,0,0,1,Pneumonia
+0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,Rheumatoid Arthritis
+0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,Rheumatoid Arthritis
+0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,0,Rheumatoid Arthritis
+1,0,1,1,1,0,1,1,1,0,0,0,0,1,1,1,1,Dengue Fever
+1,0,1,1,1,0,1,1,1,0,0,0,0,1,1,1,1,Dengue Fever
+1,0,1,1,1,0,1,1,1,0,0,0,0,1,1,1,1,Dengue Fever
+1,1,1,1,1,1,0,0,0,1,1,0,0,0,0,0,1,Bronchitis
+1,1,1,1,1,1,0,0,0,1,1,0,0,0,0,0,1,Bronchitis
+1,1,1,1,1,1,0,0,0,1,1,0,0,0,0,0,1,Bronchitis 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prediction System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 2rem;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-check {
+            margin-bottom: 0.5rem;
+        }
+        #result {
+            display: none;
+            margin-top: 1rem;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="text-center mb-0">Disease Prediction System</h3>
+            </div>
+            <div class="card-body">
+                <form id="symptomForm">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Select Symptoms:</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom1" name="symptom1">
+                                <label class="form-check-label" for="symptom1">Fever</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom2" name="symptom2">
+                                <label class="form-check-label" for="symptom2">Cough</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom3" name="symptom3">
+                                <label class="form-check-label" for="symptom3">Fatigue</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom4" name="symptom4">
+                                <label class="form-check-label" for="symptom4">Body Pain</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom5" name="symptom5">
+                                <label class="form-check-label" for="symptom5">Headache</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom6" name="symptom6">
+                                <label class="form-check-label" for="symptom6">Sore Throat</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom7" name="symptom7">
+                                <label class="form-check-label" for="symptom7">Nausea</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom8" name="symptom8">
+                                <label class="form-check-label" for="symptom8">Vomiting</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Additional Symptoms:</h5>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom9" name="symptom9">
+                                <label class="form-check-label" for="symptom9">Diarrhea</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom10" name="symptom10">
+                                <label class="form-check-label" for="symptom10">Chest Pain</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom11" name="symptom11">
+                                <label class="form-check-label" for="symptom11">Shortness of Breath</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom12" name="symptom12">
+                                <label class="form-check-label" for="symptom12">Loss of Taste</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom13" name="symptom13">
+                                <label class="form-check-label" for="symptom13">Loss of Smell</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom14" name="symptom14">
+                                <label class="form-check-label" for="symptom14">Skin Rash</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom15" name="symptom15">
+                                <label class="form-check-label" for="symptom15">Joint Pain</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom16" name="symptom16">
+                                <label class="form-check-label" for="symptom16">Muscle Pain</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="symptom17" name="symptom17">
+                                <label class="form-check-label" for="symptom17">Chills</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Predict Disease</button>
+                    </div>
+                </form>
+
+                <div class="loading">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div id="result" class="alert alert-info">
+                    <h5>Prediction Result:</h5>
+                    <p id="predictionText"></p>
+                    <p id="probabilityText"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(document).ready(function() {
+            $('#symptomForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                // Show loading
+                $('.loading').show();
+                $('#result').hide();
+                
+                // Get form data
+                var formData = new FormData(this);
+                
+                // Send AJAX request
+                $.ajax({
+                    url: '/predict/',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#predictionText').text('Predicted Disease: ' + response.prediction);
+                            $('#probabilityText').text('Confidence: ' + (response.probability * 100).toFixed(2) + '%');
+                            $('#result').show();
+                        } else {
+                            alert('Error: ' + response.error);
+                        }
+                    },
+                    error: function() {
+                        alert('An error occurred. Please try again.');
+                    },
+                    complete: function() {
+                        $('.loading').hide();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
